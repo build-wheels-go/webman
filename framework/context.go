@@ -16,8 +16,10 @@ type Context struct {
 	request        *http.Request
 	responseWriter http.ResponseWriter
 	ctx            context.Context
-	handler        ControllerHandler
-
+	//中间件链条
+	handlers []ControllerHandler
+	//当前中间件的节点
+	index int
 	//超时标记符
 	hasTimeout bool
 	//写保护机制
@@ -30,6 +32,7 @@ func NewContext(r *http.Request, w http.ResponseWriter) *Context {
 		responseWriter: w,
 		ctx:            r.Context(),
 		writerMux:      &sync.Mutex{},
+		index:          -1,
 	}
 }
 
@@ -53,6 +56,20 @@ func (ctx *Context) SetHasTimeout() {
 
 func (ctx *Context) HasTimeout() bool {
 	return ctx.hasTimeout
+}
+
+func (ctx *Context) SetHandlers(handlers []ControllerHandler) {
+	ctx.handlers = handlers
+}
+
+func (ctx *Context) Next() error {
+	ctx.index++
+	if ctx.index < len(ctx.handlers) {
+		if err := ctx.handlers[ctx.index](ctx); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // #endregion
