@@ -74,7 +74,7 @@ func (c *Core) Group(prefix string) IGroup {
 	return NewGroup(c, prefix)
 }
 
-func (c *Core) FindRouterByRequest(r *http.Request) []ControllerHandler {
+func (c *Core) FindRouterByRequest(r *http.Request) *node {
 	uri := r.URL.Path
 	method := r.Method
 
@@ -85,7 +85,7 @@ func (c *Core) FindRouterByRequest(r *http.Request) []ControllerHandler {
 		//if handler, ok := methodHandlers[upperUri]; ok {
 		//	return handler
 		//}
-		return methodHandlers.FindHandler(upperUri)
+		return methodHandlers.root.matchNode(upperUri)
 	}
 	return nil
 }
@@ -93,15 +93,20 @@ func (c *Core) FindRouterByRequest(r *http.Request) []ControllerHandler {
 func (c *Core) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := NewContext(r, w)
 
-	handlers := c.FindRouterByRequest(r)
-	if handlers == nil {
-		ctx.Json(404, "not found")
+	// 寻找路由
+	node := c.FindRouterByRequest(r)
+	if node == nil {
+		ctx.SetStatus(404).Json("not found")
 		return
 	}
-	ctx.SetHandlers(handlers)
+	ctx.SetHandlers(node.handlers)
+
+	// 设置路由参数
+	params := node.parseParamsFromEndNode(strings.ToUpper(r.URL.Path))
+	ctx.SetParams(params)
 
 	if err := ctx.Next(); err != nil {
-		ctx.Json(500, "inner error")
+		ctx.SetStatus(500).Json("inner error")
 		return
 	}
 }

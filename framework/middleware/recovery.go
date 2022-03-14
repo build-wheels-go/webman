@@ -6,7 +6,7 @@ func Recovery() framework.ControllerHandler {
 	return func(c *framework.Context) error {
 		defer func() {
 			if p := recover(); p != nil {
-				c.Json(500, p)
+				c.SetStatus(500).Json(p)
 			}
 		}()
 
