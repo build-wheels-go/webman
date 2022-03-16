@@ -1,12 +1,9 @@
 package main
 
 import (
-	"time"
-	"webman/framework"
+	"webman/framework/gin"
 )
 
-func UserLoginController(c *framework.Context) error {
-	time.Sleep(10 * time.Second)
-	c.SetOkStatus().Json(map[string]string{"data": "ok, UserLoginController"})
-	return nil
+func UserLoginController(c *gin.Context) {
+	c.ISetOkStatus().IJson(map[string]string{"data": "ok, UserLoginController"})
 }

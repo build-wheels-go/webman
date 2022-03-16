@@ -8,11 +8,12 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-	"webman/framework"
+	"webman/framework/gin"
 )
 
 func main() {
-	core := framework.NewCore()
+	core := gin.New()
+	core.Use(gin.Recovery())
 	registerRouter(core)
 
 	serve := &http.Server{

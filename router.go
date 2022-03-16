@@ -1,29 +1,29 @@
 package main
 
 import (
-	"webman/framework"
+	"webman/framework/gin"
 	"webman/framework/middleware"
 )
 
-func registerRouter(core *framework.Core) {
+func registerRouter(core *gin.Engine) {
 	//core.Get("foo", FooControllerHandler)
 	// 静态路由+HTTP方法匹配
-	core.Get("/user/login", middleware.Recovery(), middleware.Cost(), UserLoginController)
+	core.GET("/user/login", middleware.Cost(), UserLoginController)
 
 	// 批量通用前缀
 	subjectApi := core.Group("/subject")
 	{
 		subjectApi.Use(middleware.Cost(), middleware.Test2())
 		// 动态路由
-		subjectApi.Delete("/:id", SubjectDelController)
-		subjectApi.Put("/:id", SubjectUpdateController)
-		subjectApi.Get("/:id", SubjectGetController)
-		subjectApi.Get("/list/all", SubjectListController)
+		subjectApi.DELETE("/:id", SubjectDelController)
+		subjectApi.PUT("/:id", SubjectUpdateController)
+		subjectApi.GET("/:id", SubjectGetController)
+		subjectApi.GET("/list/all", SubjectListController)
 
 		subjectInnerApi := subjectApi.Group("/info")
 		{
 			subjectInnerApi.Use(middleware.Test2())
-			subjectInnerApi.Get("/name", SubjectNameController)
+			subjectInnerApi.GET("/name", SubjectNameController)
 		}
 
 	}

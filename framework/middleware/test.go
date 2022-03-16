@@ -1,28 +1,26 @@
+// Copyright 2021 build-wheels-go.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
 package middleware
 
 import (
 	"fmt"
-	"webman/framework"
+
+	"webman/framework/gin"
 )
 
-func Test1() framework.ControllerHandler {
-	return func(c *framework.Context) error {
+func Test1() gin.HandlerFunc {
+	return func(c *gin.Context) {
 		fmt.Println("middleware test1 pre")
-		if err := c.Next(); err != nil {
-			return err
-		}
+		c.Next()
 		fmt.Println("middleware test1 post")
-		return nil
 	}
 }
 
-func Test2() framework.ControllerHandler {
-	return func(c *framework.Context) error {
+func Test2() gin.HandlerFunc {
+	return func(c *gin.Context) {
 		fmt.Println("middleware test2 pre")
-		if err := c.Next(); err != nil {
-			return err
-		}
+		c.Next()
 		fmt.Println("middleware test2 post")
-		return nil
 	}
 }
