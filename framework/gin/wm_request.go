@@ -137,7 +137,7 @@ func (ctx *Context) DefaultQueryStringSlice(key string, def []string) ([]string,
 }
 
 func (ctx *Context) DefaultParamInt(key string, def int) (int, bool) {
-	if val := ctx.WebmanParam(key); val != nil {
+	if val := ctx.WmParam(key); val != nil {
 		val, err := cast.ToIntE(val)
 		if err != nil {
 			return def, false
@@ -148,7 +148,7 @@ func (ctx *Context) DefaultParamInt(key string, def int) (int, bool) {
 }
 
 func (ctx *Context) DefaultParamInt64(key string, def int64) (int64, bool) {
-	if val := ctx.WebmanParam(key); val != nil {
+	if val := ctx.WmParam(key); val != nil {
 		val, err := cast.ToInt64E(val)
 		if err != nil {
 			return def, false
@@ -159,7 +159,7 @@ func (ctx *Context) DefaultParamInt64(key string, def int64) (int64, bool) {
 }
 
 func (ctx *Context) DefaultParamFloat64(key string, def float64) (float64, bool) {
-	if val := ctx.WebmanParam(key); val != nil {
+	if val := ctx.WmParam(key); val != nil {
 		val, err := cast.ToFloat64E(val)
 		if err != nil {
 			return def, false
@@ -170,7 +170,7 @@ func (ctx *Context) DefaultParamFloat64(key string, def float64) (float64, bool)
 }
 
 func (ctx *Context) DefaultParamFloat32(key string, def float32) (float32, bool) {
-	if val := ctx.WebmanParam(key); val != nil {
+	if val := ctx.WmParam(key); val != nil {
 		val, err := cast.ToFloat32E(val)
 		if err != nil {
 			return def, false
@@ -181,7 +181,7 @@ func (ctx *Context) DefaultParamFloat32(key string, def float32) (float32, bool)
 }
 
 func (ctx *Context) DefaultParamBool(key string, def bool) (bool, bool) {
-	if val := ctx.WebmanParam(key); val != nil {
+	if val := ctx.WmParam(key); val != nil {
 		val, err := cast.ToBoolE(val)
 		if err != nil {
 			return def, false
@@ -192,7 +192,7 @@ func (ctx *Context) DefaultParamBool(key string, def bool) (bool, bool) {
 }
 
 func (ctx *Context) DefaultParamString(key string, def string) (string, bool) {
-	if val := ctx.WebmanParam(key); val != nil {
+	if val := ctx.WmParam(key); val != nil {
 		val, err := cast.ToStringE(val)
 		if err != nil {
 			return def, false
@@ -202,7 +202,7 @@ func (ctx *Context) DefaultParamString(key string, def string) (string, bool) {
 	return def, false
 }
 
-func (ctx *Context) WebmanParam(key string) interface{} {
+func (ctx *Context) WmParam(key string) interface{} {
 	if val, ok := ctx.Params.Get(key); ok {
 		return val
 	}
