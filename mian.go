@@ -9,11 +9,17 @@ import (
 	"syscall"
 	"time"
 	"webman/framework/gin"
+	"webman/provider/demo"
 )
 
 func main() {
 	core := gin.New()
+	err := core.Bind(&demo.DemoServiceProvider{})
+	if err != nil {
+		panic(err)
+	}
 	core.Use(gin.Recovery())
+
 	registerRouter(core)
 
 	serve := &http.Server{

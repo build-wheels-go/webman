@@ -2,8 +2,11 @@ package main
 
 import (
 	"webman/framework/gin"
+	"webman/provider/demo"
 )
 
 func UserLoginController(c *gin.Context) {
-	c.ISetOkStatus().IJson(map[string]string{"data": "ok, UserLoginController"})
+	demoService := c.MustMake(demo.Key).(demo.Service)
+	foo := demoService.GetFoo()
+	c.ISetOkStatus().IJson(foo)
 }

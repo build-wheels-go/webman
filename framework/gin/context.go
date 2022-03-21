@@ -19,6 +19,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"webman/framework"
 
 	"github.com/gin-contrib/sse"
 	"webman/framework/gin/binding"
@@ -81,6 +82,9 @@ type Context struct {
 	// SameSite allows a server to define a cookie attribute making it impossible for
 	// the browser to send this cookie along with cross-site requests.
 	sameSite http.SameSite
+
+	// 服务容器
+	container framework.Container
 }
 
 /************************************/
