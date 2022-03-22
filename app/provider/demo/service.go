@@ -2,10 +2,9 @@ package demo
 
 import "webman/framework"
 
-type DemoService struct {
-	//接口实现
-	Service
+var _ Service = (*DemoService)(nil)
 
+type DemoService struct {
 	c framework.Container
 }
 

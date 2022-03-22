@@ -1,12 +1,13 @@
 package main
 
 import (
+	"webman/framework/contract"
 	"webman/framework/gin"
-	"webman/provider/demo"
 )
 
 func UserLoginController(c *gin.Context) {
-	demoService := c.MustMake(demo.Key).(demo.Service)
-	foo := demoService.GetFoo()
-	c.ISetOkStatus().IJson(foo)
+	app := c.MustMake(contract.Key).(contract.App)
+	baseFolder := app.BaseFolder()
+
+	c.ISetOkStatus().IJson(baseFolder)
 }

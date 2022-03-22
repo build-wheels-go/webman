@@ -8,13 +8,18 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+	"webman/app/provider/demo"
 	"webman/framework/gin"
-	"webman/provider/demo"
+	"webman/framework/provider/app"
 )
 
 func main() {
 	core := gin.New()
 	err := core.Bind(&demo.DemoServiceProvider{})
+	if err != nil {
+		panic(err)
+	}
+	err = core.Bind(&app.WmAppProvider{})
 	if err != nil {
 		panic(err)
 	}
