@@ -5,19 +5,10 @@ package gin
 
 import (
 	"context"
-	"webman/framework"
 )
 
 func (ctx *Context) BaseContext() context.Context {
 	return ctx.Request.Context()
-}
-
-func (engine *Engine) Bind(sp framework.ServiceProvider) error {
-	return engine.container.Bind(sp)
-}
-
-func (engine *Engine) IsBind(key string) bool {
-	return engine.container.IsBind(key)
 }
 
 func (ctx *Context) Make(key string) (interface{}, error) {

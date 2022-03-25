@@ -16,7 +16,7 @@ func (provider *WmAppProvider) Register(c framework.Container) framework.NewInst
 }
 
 func (provider *WmAppProvider) Name() string {
-	return contract.Key
+	return contract.AppKey
 }
 
 func (provider *WmAppProvider) IsDefer() bool {

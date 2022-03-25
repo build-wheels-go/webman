@@ -1,6 +1,6 @@
 package contract
 
-const Key = "wm:app"
+const AppKey = "wm:app"
 
 type App interface {
 	// Version 当前版本
