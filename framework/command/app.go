@@ -12,7 +12,7 @@ import (
 	"webman/framework/contract"
 )
 
-func initAppCommand() *cobra.Command {
+func initAppCmd() *cobra.Command {
 	appCmd.AddCommand(appStartCmd)
 	return appCmd
 }

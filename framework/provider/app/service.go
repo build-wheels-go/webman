@@ -7,6 +7,8 @@ import (
 	"webman/framework"
 	"webman/framework/contract"
 	"webman/framework/util"
+
+	"github.com/google/uuid"
 )
 
 var _ contract.App = (*WmApp)(nil)
@@ -14,6 +16,7 @@ var _ contract.App = (*WmApp)(nil)
 type WmApp struct {
 	container  framework.Container //服务容器
 	baseFolder string              //基础路径
+	appId      string              //表示当前app的唯一标识，可用于分布式锁
 }
 
 func NewWmApp(params ...interface{}) (interface{}, error) {
@@ -22,7 +25,17 @@ func NewWmApp(params ...interface{}) (interface{}, error) {
 	}
 	container := params[0].(framework.Container)
 	baseFolder := params[1].(string)
-	return &WmApp{container: container, baseFolder: baseFolder}, nil
+	if baseFolder == "" {
+		flag.StringVar(&baseFolder, "base_folder", "", "base_folder参数，默认为当前路径")
+		flag.Parse()
+	}
+
+	appId := uuid.New().String()
+	return &WmApp{container: container, baseFolder: baseFolder, appId: appId}, nil
+}
+
+func (app *WmApp) AppID() string {
+	return app.appId
 }
 
 func (app *WmApp) Version() string {
@@ -33,17 +46,8 @@ func (app *WmApp) BaseFolder() string {
 	if app.baseFolder != "" {
 		return app.baseFolder
 	}
-	// 如果没有设置，则读取参数设置
-	var baseFolder string
-	flag.StringVar(&baseFolder, "base_folder", "", "base_folder参数，默认为当前路径")
-	flag.Parse()
-	if baseFolder != "" {
-		app.baseFolder = baseFolder
-		return baseFolder
-	}
 	// 参数也没有使用当前路径
-	app.baseFolder = util.GetExecDirectory()
-	return app.baseFolder
+	return util.GetExecDirectory()
 }
 
 func (app *WmApp) ConfigFolder() string {

@@ -26,6 +26,7 @@ import (
 	"strings"
 	"webman/framework"
 
+	"github.com/robfig/cron/v3"
 	flag "github.com/spf13/pflag"
 )
 
@@ -37,6 +38,13 @@ type FParseErrWhitelist flag.ParseErrorsWhitelist
 // you to define the usage and description as part of your command
 // definition to ensure usability.
 type Command struct {
+	// 服务容器
+	container framework.Container
+	// Command支持Cron，只在rootCommand支持
+	Cron *cron.Cron
+	// 对应Cron命令的信息
+	CronSpecs []CronSpec
+
 	// Use is the one-line usage message.
 	// Recommended syntax is as follow:
 	//   [ ] identifies an optional argument. Arguments that are not enclosed in brackets are required.
@@ -223,8 +231,6 @@ type Command struct {
 	// SuggestionsMinimumDistance defines minimum levenshtein distance to display suggestions.
 	// Must be > 0.
 	SuggestionsMinimumDistance int
-
-	container framework.Container
 }
 
 // Context returns underlying command context. If command was executed

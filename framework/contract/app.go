@@ -3,6 +3,8 @@ package contract
 const AppKey = "wm:app"
 
 type App interface {
+	// AppID 当前的AppID
+	AppID() string
 	// Version 当前版本
 	Version() string
 	// BaseFolder 定义基础路径

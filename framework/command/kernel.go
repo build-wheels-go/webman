@@ -30,5 +30,6 @@ var rootCmd = &cobra.Command{
 
 // 添加框架核心命令
 func addKernelCommands(root *cobra.Command) {
-	root.AddCommand(initAppCommand())
+	root.AddCommand(initAppCmd())
+	root.AddCommand(initCronCmd())
 }
