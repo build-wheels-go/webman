@@ -43,7 +43,7 @@ func (c *WmContainer) Bind(sp ServiceProvider) error {
 	key := sp.Name()
 	c.providers[key] = sp
 
-	if sp.IsDefer() == false {
+	if !sp.IsDefer() {
 		if err := sp.Boot(c); err != nil {
 			return err
 		}

@@ -1,6 +1,7 @@
 package console
 
 import (
+	"time"
 	"webman/app/console/command/demo"
 	"webman/framework"
 	"webman/framework/cobra"
@@ -18,5 +19,6 @@ func RunCommand(container framework.Container) error {
 
 // 添加业务命令
 func addAppCommands(rootCmd *cobra.Command) {
-	rootCmd.AddCronCommand("* * * * * *", demo.FooCmd)
+	// rootCmd.AddCronCommand("* * * * * *", demo.FooCmd)
+	rootCmd.AddDistributedCronCommand("test", "*/5 * * * * *", demo.FooCmd, 2*time.Second)
 }
