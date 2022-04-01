@@ -23,4 +23,6 @@ type App interface {
 	RuntimeFolder() string
 	// TestFolder 定义测试文件路径
 	TestFolder() string
+	// LoadAppConfig 加载配置map
+	LoadAppConfig(conf map[string]string)
 }

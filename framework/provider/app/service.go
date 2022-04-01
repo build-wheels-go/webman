@@ -17,6 +17,8 @@ type WmApp struct {
 	container  framework.Container //服务容器
 	baseFolder string              //基础路径
 	appId      string              //表示当前app的唯一标识，可用于分布式锁
+
+	configMap map[string]string //加载的配置
 }
 
 func NewWmApp(params ...interface{}) (interface{}, error) {
@@ -31,7 +33,8 @@ func NewWmApp(params ...interface{}) (interface{}, error) {
 	}
 
 	appId := uuid.New().String()
-	return &WmApp{container: container, baseFolder: baseFolder, appId: appId}, nil
+	configMap := make(map[string]string)
+	return &WmApp{container: container, baseFolder: baseFolder, appId: appId, configMap: configMap}, nil
 }
 
 func (app *WmApp) AppID() string {
@@ -51,41 +54,77 @@ func (app *WmApp) BaseFolder() string {
 }
 
 func (app *WmApp) ConfigFolder() string {
+	if val, ok := app.configMap["config_folder"]; ok {
+		return val
+	}
 	return filepath.Join(app.BaseFolder(), "config")
 }
 
 func (app *WmApp) HttpFolder() string {
+	if val, ok := app.configMap["http_folder"]; ok {
+		return val
+	}
 	return filepath.Join(app.BaseFolder(), "http")
 }
 
 func (app *WmApp) MiddlewareFolder() string {
+	if val, ok := app.configMap["middleware_folder"]; ok {
+		return val
+	}
 	return filepath.Join(app.HttpFolder(), "middleware")
 }
 
 func (app *WmApp) StorageFolder() string {
+	if val, ok := app.configMap["storage_folder"]; ok {
+		return val
+	}
 	return filepath.Join(app.BaseFolder(), "storage")
 }
 
 func (app *WmApp) LogFolder() string {
+	if val, ok := app.configMap["log_folder"]; ok {
+		return val
+	}
 	return filepath.Join(app.StorageFolder(), "log")
 }
 
 func (app *WmApp) RuntimeFolder() string {
+	if val, ok := app.configMap["runtime_folder"]; ok {
+		return val
+	}
 	return filepath.Join(app.StorageFolder(), "runtime")
 }
 
 func (app *WmApp) ConsoleFolder() string {
+	if val, ok := app.configMap["console_folder"]; ok {
+		return val
+	}
 	return filepath.Join(app.BaseFolder(), "console")
 }
 
 func (app *WmApp) CommandFolder() string {
+	if val, ok := app.configMap["command_folder"]; ok {
+		return val
+	}
 	return filepath.Join(app.ConsoleFolder(), "command")
 }
 
 func (app *WmApp) ProviderFolder() string {
+	if val, ok := app.configMap["provider_folder"]; ok {
+		return val
+	}
 	return filepath.Join(app.BaseFolder(), "provider")
 }
 
 func (app *WmApp) TestFolder() string {
+	if val, ok := app.configMap["test_folder"]; ok {
+		return val
+	}
 	return filepath.Join(app.BaseFolder(), "test")
+}
+
+func (app *WmApp) LoadAppConfig(conf map[string]string) {
+	for k, v := range conf {
+		app.configMap[k] = v
+	}
 }
