@@ -38,15 +38,10 @@ func NewWmContainer() *WmContainer {
 
 func (c *WmContainer) Bind(sp ServiceProvider) error {
 	c.lock.Lock()
-	defer c.lock.Unlock()
-
 	key := sp.Name()
 	c.providers[key] = sp
-
+	c.lock.Unlock()
 	if !sp.IsDefer() {
-		if err := sp.Boot(c); err != nil {
-			return err
-		}
 		params := sp.Params(c)
 		instance, err := c.newInstance(sp, params)
 		if err != nil {

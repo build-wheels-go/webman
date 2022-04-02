@@ -1,0 +1,6 @@
+mysql: 
+  hostname: 192.168.56.1 
+  username: webman 
+  password: AkHI3WxMWWxLLPOB 
+  timeout: 1 
+  readtime: 2.3

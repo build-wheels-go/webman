@@ -6,7 +6,9 @@ import (
 	"webman/app/http"
 	"webman/framework"
 	"webman/framework/provider/app"
+	"webman/framework/provider/config"
 	"webman/framework/provider/distributed"
+	"webman/framework/provider/env"
 	"webman/framework/provider/kernel"
 )
 
@@ -14,6 +16,10 @@ func main() {
 	//初始化服务容器
 	container := framework.NewWmContainer()
 	_ = container.Bind(&app.WmAppProvider{})
+
+	_ = container.Bind(&env.WmEnvProvider{})
+
+	_ = container.Bind(&config.WmConfigProvider{})
 
 	_ = container.Bind(&distributed.LocalDistributedProvider{})
 

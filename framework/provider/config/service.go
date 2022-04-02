@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"log"
+	"time"
 
 	"io/ioutil"
 	"os"
@@ -15,6 +16,7 @@ import (
 	"webman/framework/contract"
 
 	"github.com/fsnotify/fsnotify"
+	"github.com/mitchellh/mapstructure"
 	"github.com/pkg/errors"
 	"github.com/spf13/cast"
 	"gopkg.in/yaml.v3"
@@ -89,9 +91,9 @@ func NewWmConfig(params ...interface{}) (interface{}, error) {
 		select {
 		case ev := <-watcher.Events:
 			path, _ := filepath.Abs(ev.Name)
-			index := strings.Index(path, string(os.PathSeparator))
+			index := strings.LastIndex(path, string(os.PathSeparator))
 			folder := path[:index]
-			fileName := path[index:]
+			fileName := path[index+1:]
 			if ev.Op&fsnotify.Create == fsnotify.Create {
 				log.Println("创建文件：", ev.Name)
 				_ = wmConfig.loadConfigFile(folder, fileName)
@@ -116,7 +118,6 @@ func NewWmConfig(params ...interface{}) (interface{}, error) {
 func (conf *WmConfig) loadConfigFile(folder string, file string) error {
 	conf.lock.Lock()
 	defer conf.lock.Unlock()
-
 	s := strings.Split(file, ".")
 	if len(s) == 2 && (s[1] == "yaml" || s[1] == "yml") {
 		fileName := s[0]
@@ -214,6 +215,17 @@ func (conf *WmConfig) find(key string) interface{} {
 	return searchMap(conf.configs, strings.Split(key, conf.separator))
 }
 
+func (conf *WmConfig) Load(key string, val interface{}) error {
+	decoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
+		TagName: "yaml",
+		Result:  val,
+	})
+	if err != nil {
+		return err
+	}
+	return decoder.Decode(conf.find(key))
+}
+
 func (conf *WmConfig) IsExist(key string) bool {
 	return conf.find(key) != nil
 }
@@ -232,4 +244,32 @@ func (conf *WmConfig) GetString(key string) string {
 
 func (conf *WmConfig) GetInt(key string) int {
 	return cast.ToInt(conf.find(key))
+}
+
+func (conf *WmConfig) GetFloat64(key string) float64 {
+	return cast.ToFloat64(conf.find(key))
+}
+
+func (conf *WmConfig) GetTime(key string) time.Time {
+	return cast.ToTime(conf.find(key))
+}
+
+func (conf *WmConfig) GetStringSlice(key string) []string {
+	return cast.ToStringSlice(conf.find(key))
+}
+
+func (conf *WmConfig) GetIntSlice(key string) []int {
+	return cast.ToIntSlice(conf.find(key))
+}
+
+func (conf *WmConfig) GetStringMap(key string) map[string]interface{} {
+	return cast.ToStringMap(conf.find(key))
+}
+
+func (conf *WmConfig) GetStringMapString(key string) map[string]string {
+	return cast.ToStringMapString(conf.find(key))
+}
+
+func (conf *WmConfig) GetStringMapStringSlice(key string) map[string][]string {
+	return cast.ToStringMapStringSlice(conf.find(key))
 }

@@ -32,9 +32,7 @@ var cronCmd = &cobra.Command{
 	Short: "定时任务相关命令",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			if err := cmd.Help(); err != nil {
-				return err
-			}
+			return cmd.Help()
 		}
 		return nil
 	},

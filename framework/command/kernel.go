@@ -32,4 +32,5 @@ var rootCmd = &cobra.Command{
 func addKernelCommands(root *cobra.Command) {
 	root.AddCommand(initAppCmd())
 	root.AddCommand(initCronCmd())
+	root.AddCommand(initConfigCmd())
 }

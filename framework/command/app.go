@@ -22,7 +22,9 @@ var appCmd = &cobra.Command{
 	Short: "应用控制命令",
 	Long:  "应用控制命令，包含应用启动、关闭、重启、查询等功能",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		_ = cmd.Help()
+		if len(args) == 0 {
+			return cmd.Help()
+		}
 		return nil
 	},
 }
