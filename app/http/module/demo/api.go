@@ -26,11 +26,11 @@ func (api *DemoApi) Demo(ctx *gin.Context) {
 }
 
 func (api *DemoApi) Config(ctx *gin.Context) {
-	configServie := ctx.MustMake(contract.ConfigKey).(contract.Config)
+	configService := ctx.MustMake(contract.ConfigKey).(contract.Config)
 	data := map[string]string{
-		"hostname": configServie.GetString("db.mysql.hostname"),
-		"username": configServie.GetString("db.mysql.username"),
-		"password": configServie.GetString("db.mysql.password"),
+		"hostname": configService.GetString("db.mysql.hostname"),
+		"username": configService.GetString("db.mysql.username"),
+		"password": configService.GetString("db.mysql.password"),
 	}
 	ctx.JSON(200, data)
 }

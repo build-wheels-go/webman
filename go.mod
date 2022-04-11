@@ -16,6 +16,7 @@ require (
 	github.com/mitchellh/mapstructure v1.4.3
 	github.com/pkg/errors v0.9.1
 	github.com/robfig/cron/v3 v3.0.1
+	github.com/rs/xid v1.4.0
 	github.com/sevlyar/go-daemon v0.1.5
 	github.com/spf13/cast v1.4.1
 	github.com/spf13/cobra v1.4.0
